@@ -1,90 +1,139 @@
 """
-Exam 1 Take-Home Project
+Exam 2 Take-Home Project
 
-The following is a program to simulate the motion of non-interacting particles inside a box
-Time is discretized into small intervals (timesteps), during which the motion of the particles follow some simple physical laws
-Trajectories of particles are simulated as a sequence of a large number of timesteps
+The following is a program to simulate the motion of objects interacting via gravitational forces. We will use the Velocity Verlet 
+algorithm to integrate the equations of motion of the system's components.
  
 Authors: O. Andreussi and STUDENT
 """
-# TASK 1: This program should perform a simulation of a single particle moving in one-dimension inside a box with hard reflecting walls.
-#         This task only requires you to complete the move() function, but you can modify the parameters or the starting configuration
-#         of the system to check the functioning of the program.
-# 
-# EXPECTED OUTCOME: An animation of a dot moving along the real axis and bounching back and forth inside the [0,1] interval.
-#
-# Parameters and variables
-# 
-#    nparticles: number of particles in the simulation
-#    dt: lenght of the timestep (in arbitrary units)
-#    xbox: size of box along the x axis (in arbitrary units)
-#    xpos: x component of particles positions (in arbitrary units)
-#    xvel: x component of particles velocities (in arbitrary units)
 #
 # Start by importing useful modules
 #
 import numpy as np
-import matplotlib.animation as ani
-import matplotlib.pyplot as plt
 #
 # Setup simulation parameters
 #
-nparticles=1 # for this assignment we only consider one particle 
-dt=0.01 # this value should be reasonable, but you are free to test larger or smaller values
-xbox=1. # when using arbitrary units is a good idea to keep them close to unity
+dt= # TASK 4
+maxtime = # TASK 4
 #
-# Setup starting configuration of the system
+# Setup starting configuration of the system 
+# TASK 2
 #
+G = # TASK 2
 #
-# Setup starting configuration of the system
+# Earth
 #
-xpos=0.0 # we start with the particle at the origin
-xvel=1.0 # we start with some positive velocity along the x axis, but feel free to change and test different (positive or negative) values
+massE = # TASK 2
+posE = [] # this should have at least two components TASK 2
+velE =  [] # this should have at least two components TASK 2
 #
-# The following is the function responsible to describe the motion of a particle during a short timestep
+# Sun (if you feel more comfortable, you can consider the Sun as not moving)
 #
-def move(dt,xpos,xvel,xbox):
+massS = # TASK 2
+posS = [] # this should have at least two components TASK 2
+velS = [] # this should have at least two components TASK 2
+#
+# Compute the forces acting on the system # TASK 1
+#
+def force(massA, posA, massB, posB):
     """
-    This function describes the motion of a particle subject to no interactions apart from elastic reflections from the box walls.
-    The particle's coordinates will change according to a constant velocity motion. 
-    If the position of the particle falls outside of the box walls, the particle's velocity changes sign (reflection).
+    This function computes the gravitational force acting on object A due to object B
     Input arguments:
-        dt: timestep; xpos: particle's coordinate along x; xvel: x-component of particle's velocity; xbox: lenght of box.
+        massA : the mass of object A
+        posA: the position of object A
+        massB : the mass of object B
+        posB: the position of object B
     Output results:
-        updated x-components of particle's position and velocity
+        force: the force acting on object A (the one on B is going to be the opposite) 
+        # NOTE the force should have the same number of components as the positions, so at least two
     """
-    # TAKS1: 
-    #       1. write a statement to update the particle's position (xpos) according to a 1D constant velocity motion
+    # TASK 1
+    return force
+#
+# The following is the function responsible to describe the motion of a single particle during a short timestep
+#
+def move_position(dt,pos,vel,force,mass,box):
+    """
+    This function describes the motion of a single particle
+    The particle's coordinates are updated according to Velocity Verlet algorithm. 
+    Input arguments:
+        dt: timestep; 
+        pos: particle's coordinates; 
+        vel: particle's velocity; 
+        force: force acting on particle; 
+        mass: mass of particle;
+    Output results:
+        pos: list with the updated positions of particles
+    """
+    for i in range(len(pos)):
+       pos[i]=pos[i]+vel[i]*dt+0.5*force[i]/mass[i]*dt**2
+    return pos
+#
+def move_velocity(dt,vel,forceold,forcenew,mass,box):
+    """
+    This function describes the motion of a single particle
+    The particle's velocities are updated according to Velocity Verlet algorithm. 
+    Input arguments:
+        dt: timestep; 
+        pos: particle's coordinates; 
+        vel: particle's velocity; 
+        forceold/forcenew: particle forces; 
+        masses: mass of particle;
+    Output results:
+        vel: list with the updated velocity of the particle
+    """
+    for i in range(len(vel)):
+       vel[i]=vel[i]+0.5*(forcenew[i]+forceold[i])/mass[i]*dt
+    return vel
+#
+def kinetic_energy(mass,vel):
+    """
+    This functions computes the kinetic energy of a single object
+    Input arguments:
+        mass: mass of particle;
+        vel: particle's velocity, at least 2 components;
+    Output results:
+        kinetic : kinetic energy of the system
+    """
+    kinetic = 0.0
+    for i in range(len(vel)):
+       kinetic = kinetic + 0.5 * mass * vel[i]**2
+    return kinetic
+#
+def potential_energy(massA, posA, massB, posB): # TASK 1
+    """
+    This functions computes the gravitational potential energy of A interacting with B
+    Input arguments:
+        massA : the mass of object A
+        posA: the position of object A
+        massB : the mass of object B
+        posB: the position of object B
+    Output results:
+        gravitational : gravitational energy of interaction of A and B
+    """
+    # TASK 1
+    return gravitational
+#
+time=time0
+r=[]
+t=[]
+forceEold=force() # YOU NEED TO ENTER THE APPROPRIATE ARGUMENTS
+while time < maxtime : 
+    t.append(time)
+    r.append(pos.copy())
+    time=time+dt
+    # Update the Earth position
+    posE=move_position(dt,posE,velE,forceEold,massE)
+    # If you want you can update the Sun position
     #
-    #       2. write a conditional block to check if the new position falls within the interval [0,xbox]. 
-    #          If the new position is outside of this interval, change the sign of the particle's velocity (xvel).
-    #       
-    return xpos, xvel
+    # Compute the new forces
+    forceEnew=force() # YOU NEED TO ENTER THE APPROPRIATE ARGUMENTS
+    # Update the Earth velocity
+    velE=move_velocity(dt,velE,forceEold,forceEnew,massE)
+    # If you want you can update the Sun velocity
+    #
+    # Save the forces for the next step
+    forceEold=forceEnew
 #
-# The following command setup the visualization of plot, where the particle is represented by a green filled circle
+# TASK 3: Plot the kinetic, potential, and total energy of the projectile vs. time
 #
-fig, axes = plt.subplots(1)
-axes.set_xlim(0, xbox) # This statement set the limits for the x-axis of the plot
-axes.set_ylim(-0.01, 0.01) # This statement set the limits for the y-axis of the plot.
-a,=axes.plot(xpos,0.,'go') # We generate a plot with the starting configuration
-#
-# Define the function that performs a single step of the animation
-#
-def animate(i):
-    global xpos
-    global xvel
-    xpos, xvel = move(dt,xpos,xvel,xbox) # we move the particle
-    a.set_data(xpos,0.) # we update the plot
-    return a,
-#
-# We perform the animation using the FuncAnimation function from the animation module of matplotlib. 
-# This function requires as an argument the user-defined animate() function above
-#
-anim = ani.FuncAnimation(fig, animate, frames=1000, interval=50, blit=True)
-#
-# If you keep the following lines commented out, the code will only show the animation
-# If you uncomment the following lines, the animation will be saved as an mp4 video
-#
-#Writer = ani.writers['ffmpeg']
-#writer = Writer(fps=20, bitrate=1800)
-#anim.save('task1.mp4', writer=writer)
