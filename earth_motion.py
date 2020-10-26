@@ -10,10 +10,11 @@ Authors: O. Andreussi and STUDENT
 # Start by importing useful modules
 #
 import numpy as np
+import matplotlib.pyplot as plt
 #
 # Setup simulation parameters
 #
-dt= # TASK 4
+dt = # TASK 4
 maxtime = # TASK 4
 #
 # Setup starting configuration of the system 
@@ -25,7 +26,7 @@ G = # TASK 2
 #
 massE = # TASK 2
 posE = [] # this should have at least two components TASK 2
-velE =  [] # this should have at least two components TASK 2
+velE = [] # this should have at least two components TASK 2
 #
 # Sun (if you feel more comfortable, you can consider the Sun as not moving)
 #
@@ -52,35 +53,35 @@ def force(massA, posA, massB, posB):
 #
 # The following is the function responsible to describe the motion of a single particle during a short timestep
 #
-def move_position(dt,pos,vel,force,mass,box):
+def move_position(dt,pos,vel,force,mass):
     """
     This function describes the motion of a single particle
     The particle's coordinates are updated according to Velocity Verlet algorithm. 
     Input arguments:
         dt: timestep; 
-        pos: particle's coordinates; 
-        vel: particle's velocity; 
-        force: force acting on particle; 
-        mass: mass of particle;
+        pos: particle position (at least two components); 
+        vel: particle velocity (at least two components); 
+        force: force acting on particle (at least two components); 
+        mass: particle mass (a scalar);
     Output results:
-        pos: list with the updated positions of particles
+        pos: list with the updated components of the particle position
     """
     for i in range(len(pos)):
-       pos[i]=pos[i]+vel[i]*dt+0.5*force[i]/mass[i]*dt**2
+       pos[i]=pos[i]+vel[i]*dt+0.5*force[i]/mass*dt**2
     return pos
 #
-def move_velocity(dt,vel,forceold,forcenew,mass,box):
+def move_velocity(dt,vel,forceold,forcenew,mass):
     """
     This function describes the motion of a single particle
     The particle's velocities are updated according to Velocity Verlet algorithm. 
     Input arguments:
         dt: timestep; 
-        pos: particle's coordinates; 
-        vel: particle's velocity; 
-        forceold/forcenew: particle forces; 
-        masses: mass of particle;
+        pos: particle position (at least two components); 
+        vel: particle velocity (at least two components); 
+        forceold/forcenew: particle forces (at least two components); 
+        mass: particle mass (a scalar);
     Output results:
-        vel: list with the updated velocity of the particle
+        vel: list with the updated components of the particle velocity
     """
     for i in range(len(vel)):
        vel[i]=vel[i]+0.5*(forcenew[i]+forceold[i])/mass[i]*dt
@@ -90,10 +91,10 @@ def kinetic_energy(mass,vel):
     """
     This functions computes the kinetic energy of a single object
     Input arguments:
-        mass: mass of particle;
-        vel: particle's velocity, at least 2 components;
+        mass: particle mass (a scalar);
+        vel: particle velocity (at least two components);
     Output results:
-        kinetic : kinetic energy of the system
+        kinetic : kinetic energy of the object
     """
     kinetic = 0.0
     for i in range(len(vel)):
@@ -104,23 +105,23 @@ def potential_energy(massA, posA, massB, posB): # TASK 1
     """
     This functions computes the gravitational potential energy of A interacting with B
     Input arguments:
-        massA : the mass of object A
-        posA: the position of object A
-        massB : the mass of object B
-        posB: the position of object B
+        massA : mass of object A
+        posA: position of object A
+        massB : mass of object B
+        posB: position of object B
     Output results:
         gravitational : gravitational energy of interaction of A and B
     """
     # TASK 1
     return gravitational
 #
-time=time0
+time=0.0
 r=[]
 t=[]
 forceEold=force() # YOU NEED TO ENTER THE APPROPRIATE ARGUMENTS
 while time < maxtime : 
     t.append(time)
-    r.append(pos.copy())
+    r.append(posE.copy())
     time=time+dt
     # Update the Earth position
     posE=move_position(dt,posE,velE,forceEold,massE)
