@@ -7,7 +7,7 @@ The project is organized into five tasks, but this project will require to devel
 
 TASKS:
 1. Implement the expression for the gravitational force and gravitational potential energy
-2. Initialilze the system properties to generate a closed orbit similar to the one of the Eart around the Sun
+2. Initialize the system properties to generate a closed orbit similar to the one of the Eart around the Sun
 3. Plot the values of the energies (potential, kinetic, total) as a function of time
 4. Determine a value of the timestep that allows to have a proper dynamics
 
