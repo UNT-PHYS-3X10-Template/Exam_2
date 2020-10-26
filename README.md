@@ -13,4 +13,4 @@ TASKS:
 
 OPTIONAL TASKS:
 1. Visualize the trajectory of the system with an animation, either using the animation module of matplotlyb or Vpython.
-2. Include the motion of the Moon.
+2. Include the motion of the Moon or another planet of the solar system.
