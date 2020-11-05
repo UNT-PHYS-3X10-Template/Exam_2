@@ -84,7 +84,7 @@ def move_velocity(dt,vel,forceold,forcenew,mass):
         vel: list with the updated components of the particle velocity
     """
     for i in range(len(vel)):
-       vel[i]=vel[i]+0.5*(forcenew[i]+forceold[i])/mass[i]*dt
+       vel[i]=vel[i]+0.5*(forcenew[i]+forceold[i])/mass*dt
     return vel
 #
 def kinetic_energy(mass,vel):
